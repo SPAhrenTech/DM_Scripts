@@ -1,0 +1,65 @@
+ScriptManager	menu item	Script Manager	Y:\Documents\Scripts\backups\20220626a_Win7\ScriptManagerMenuItem_97.s	Scripts	
+Useful	library	Y:\Documents\Scripts\backups\20220626a_Win7\useful_32.s
+MatrixMath	library	Y:\Documents\Scripts\backups\20220626a_Win7\matrixMath_04.s
+Size	library	Y:\Documents\Scripts\backups\20220626a_Win7\SizeLib_32.s
+SameSize	menu item	Same	Y:\Documents\Scripts\backups\20220626a_Win7\sameSize_32.s	Window	Size
+ZoomSize	menu item	Zoom	Y:\Documents\Scripts\backups\20220626a_Win7\zoomSize_32.s	Window	Size
+FitSize	menu item	Fit	Y:\Documents\Scripts\backups\20220626a_Win7\fitSize_32.s	Window	Size
+FullSize	menu item	Full	Y:\Documents\Scripts\backups\20220626a_Win7\fullSize_32.s	Window	Size
+JEM Tags	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Tags_lib_04.s
+JEM Lib offline	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Lib_offline_52.s
+JEM Prefs	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Prefs_33.s
+DigiScanSim	library	Y:\Documents\Scripts\backups\20220626a_Win7\DigiScanSim_00.s
+DataManager	library	Y:\Documents\Scripts\backups\20220626a_Win7\DataManager_31.s
+JEM Data	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Data_12.s
+JEM Object	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Object_27.s
+JEM Thread	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Thread_120.s
+JEM Dialog	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Dialog_68.s
+JEM_Widget	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Widget_19.s
+JEM Lens	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Lens_70.s
+JEM_Corr	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Corr_126.s
+JEM_Comp	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Comp_123.s
+JEM Align Files	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_AlignFiles_30.s
+Tiffen	library	Y:\Documents\Scripts\backups\20220626a_Win7\Tiffen_10.s
+Flatten	library	Y:\Documents\Scripts\backups\20220626a_Win7\FlattenLib_064.s
+FFT_AnythingLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\FFT_anything_lib_24.s
+FFT Anything	menu item	FFT Anything	Y:\Documents\Scripts\backups\20220626a_Win7\FFT_anything_DLG_02.s	Process	
+CameraMngrSim	library	Y:\Documents\Scripts\backups\20220626a_Win7\CameraMngrSim_01.s
+Gatan Camera	library	Y:\Documents\Scripts\backups\20220626a_Win7\GatanCamera_25.s
+CameraCalib	library	Y:\Documents\Scripts\backups\20220626a_Win7\CameraCalib_29.s
+Alignment	technique	Alignment	JEM-2100	Y:\Documents\Scripts\backups\20220626a_Win7\target.tif
+Acquisition	technique	Acquisition	JEM-2100	Y:\Documents\Scripts\backups\20220626a_Win7\acquire.tif
+ExposureLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\Exposure_17.s
+Exposure	task	Exposure	Exposure	     0	Acquisition	     1	     1
+ProgInfoLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\ProgressInfo_14.s
+ProgInfo	widget	Progress Info	ProgressInfo	panel	     0
+AcqControl	library	Y:\Documents\Scripts\backups\20220626a_Win7\AcqControl_28.s
+AcqCtrl	task	Acquisition Control	AcqControl	     0	Acquisition	     1	     1
+SmartAcqLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\SmartAcq_170.s
+SmartAcq	task	Smart Acquire	SmartAcq	     0	Acquisition	     1	     1
+MagCalibMode	library	Y:\Documents\Scripts\backups\20220626a_Win7\MagCalibMode_15.s
+DefCalibLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\DefCalib_148.s
+DefCalib	task	Deflector Calibration	DefCalib	     0	Alignment	     0	     0
+MontageLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\Montage_146.s
+Montage	task	Montage	Montage	     0	Acquisition	     0	     0
+JEM Series	library	Y:\Documents\Scripts\backups\20220626a_Win7\JEM_Series_253.s
+Series	widget	Series	JEM_Series	panel	     0
+ScaleMarkerLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\ScaleMarker_14.s
+Scale Marker	widget	Scale Marker	ScaleMarker	panel	     0
+LoadAlign	menu item	Load	Y:\Documents\Scripts\backups\20220626a_Win7\AlignFilesLoad_18.s	JEM-2100	Align
+SaveAlign	menu item	Save	Y:\Documents\Scripts\backups\20220626a_Win7\AlignFilesSave_18.s	JEM-2100	Align
+Stop	menu item	Stop	Y:\Documents\Scripts\backups\20220626a_Win7\terminate_02.s	JEM-2100	
+ChangeCalibration	library	Y:\Documents\Scripts\backups\20220626a_Win7\ChangeCalibration_09.s
+LensWobblerLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\LensWobbler_17.s
+DefWobblerLib	library	Y:\Documents\Scripts\backups\20220626a_Win7\DefWobbler_18.s
+Flatten Dialog	menu item	Flatten	Y:\Documents\Scripts\backups\20220626a_Win7\FlattenDialog_074.s	Process	
+Auto FFT	menu item	Auto FFT	Y:\Documents\Scripts\backups\20220626a_Win7\auto_fft_02.s	Process	
+DigiScan	task	Scan		     1	Acquisition	     0	     0
+LensWobbler	task	Lens Wobbler	LensWobbler	     0	Alignment	     0	     0
+DefWobbler	task	Deflector Wobbler	DefWobbleControl	     0	Alignment	     0	     0
+SmartAcq_STEM_Lib	library	Y:\Documents\Scripts\backups\20220626a_Win7\SmartAcq_STEM_13.s
+SmartAcq_STEM	task	SmartAcquire STEM	SmartAcq_STEM	     0	Acquisition	     0	     0
+Uncalibrate	menu item	Uncalibrate	Y:\Documents\Scripts\backups\20220626a_Win7\uncalibrate_01.s	Process	Calibration
+ChangeCalibDlg	menu item	Change	Y:\Documents\Scripts\backups\20220626a_Win7\ChangeCalibrationDlg_00.s	Process	Calibration
+CopyCalibDlg	menu item	Copy	Y:\Documents\Scripts\backups\20220626a_Win7\copy_calibration_00.s	Process	Calibration
+MakeGrayscaleDlg	menu item	Make Grayscale	Y:\Documents\Scripts\backups\20220626a_Win7\make_grayscale_00.s	Display	

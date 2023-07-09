@@ -1,0 +1,286 @@
+DEFCALIB	cc position	 20, 60
+DEFCALIB	echo	0
+DEFCALIB	image position	 20, 20
+DEFCALIB	online	1
+DEFCALIB	scaling cross correlation ratio	20
+DEFCALIB	show cross correlation	1
+DEFCALIB	Est. CLA1 MAG scale (nm/lu)	2.33176
+DEFCALIB	Est. CLA2 DIFF scale (mrad/lu)	0.0132072
+DEFCALIB	Est. ISBAL2 DIFF scale (mrad/lu)	0.00989221
+DEFCALIB	Est. PLA DIFF scale (upix/lu)	1.36736
+DEFCALIB	Est. PLA MAG scale (upix/lu)	1.24701
+DEFCALIB	Est. ISBAL1 MAG scale (nm/lu)	0.0280088
+DEFCALIB	Est. PLA LOWMAG scale (upix/lu)	1.08236
+DEFCALIB	Est. PLA MAG scale (upix/lu)	0.892032
+DEFCALIB	Est. IS1 DIFF scale (mrad/lu)	0.0091602
+DEFCALIB	Est. CLA2 MAG OA scale (nm/lu)	3.61208
+DEFCALIB	Est. IS1 MAG scale (nm/lu)	0.0606593
+DEFCALIB	Est. IS2 MAG scale (nm/lu)	0.138466
+DEFCALIB	Est. ISBAL2 MAG scale (nm/lu)	0.0775307
+DEFCALIB	Est. IS2 DIFF scale (mrad/lu)	1
+DEFCALIB dialog	deflector	IS2
+
+DEFCONTROL	deflector	CLA1
+DEFCONTROL	setting step	16384
+
+EXPOSURE	exposure time list (s)	 4, 2, 1, 0.8, 0.5, 0.3, 0.1
+
+ACQCONTROL	use SmartAcq	1
+ACQCONTROL	control screen	0
+ACQCONTROL	control filament	0
+ACQCONTROL	screen up	0
+
+JEM_SERIES	echo	0
+JEM_SERIES	online	1
+JEM_SERIES	user	spahrenk
+
+DIFFALIGN	amplitude points	1
+DIFFALIGN	angle points	27
+DIFFALIGN	calib alignment	1
+DIFFALIGN	exponent	11
+DIFFALIGN	init alignment	1
+
+MAGALIGN	exponent	3
+MAGALIGN	init alignment	0
+MAGALIGN	steps	13
+
+SA_MAGALIGN	amplitude points	1
+SA_MAGALIGN	angle points	15
+SA_MAGALIGN	calib alignment	0
+SA_MAGALIGN	exponent	3
+SA_MAGALIGN	init alignment	0
+
+SCALEMARKERINFO	attributes	0
+SCALEMARKERINFO	background	0,0,0
+SCALEMARKERINFO	font	Arial
+SCALEMARKERINFO	font size	12
+SCALEMARKERINFO	foreground	255,255,255
+SCALEMARKERINFO	position X	0.05
+SCALEMARKERINFO	position Y	0.95
+SCALEMARKERINFO	right aligned	0
+
+LENSWOBBLER	amplitude	1024
+LENSWOBBLER	frequency (Hz)	0.5
+LENSWOBBLER	lens	IL1
+LENSWOBBLER	online	1
+
+DEFWOBBLECONTROL	amplitude	4096
+DEFWOBBLECONTROL	angle (°)	100
+DEFWOBBLECONTROL	deflector	CLA1
+DEFWOBBLECONTROL dialog	angle (°) step	10
+
+DEFWOBBLER	frequency (Hz)	0.2
+DEFWOBBLER	online	1
+DEFWOBBLER	polar	1
+DEFWOBBLER	sync camera	1
+DEFWOBBLER	window position	 1186, 23
+
+DEFWOBBLER dialog	angle (°) step	10
+DEFWOBBLER dialog	title	Deflector Wobbler
+
+MONTAGE	Nx	2
+MONTAGE	Ny	3
+MONTAGE	online	1
+MONTAGE	overlap	0.1
+MONTAGE	calibrated	1
+MONTAGE	deflector	PLA
+
+ACQCONTROL	control screen	1
+ACQCONTROL	screen up	0
+ACQCONTROL	use SmartAcq	1
+
+MAGCALIBMODE	SA position	SA out
+
+ALIGNMENT	load AngleBal	1
+ALIGNMENT	load CLA1	1
+ALIGNMENT	load CLA2	1
+ALIGNMENT	load CondStig	1
+ALIGNMENT	load Gun1	1
+ALIGNMENT	load Gun2	1
+ALIGNMENT	load IntStig	1
+ALIGNMENT	load IS1	1
+ALIGNMENT	load IS2	1
+ALIGNMENT	load ObjStig	1
+ALIGNMENT	load PLA	1
+ALIGNMENT	load ShiftBal	1
+ALIGNMENT	load TiltBal	1
+JEM_IS_BAL	use SmartAcq	1
+IS_BALWOBBLER	frequency (Hz)	1
+IS_BALWOBBLER	online	1
+IS_BALWOBBLER	polar	0
+IS_BALWOBBLER	sync camera	1
+IS_BALWOBBLER	window position	238,27
+IS_BALWOBBLER dialog	title	IS Balance Wobbler
+IS_BALWOBBLECONTROL	amplitude	1024
+IS_BALWOBBLECONTROL	angle (°)	0
+IS_BALWOBBLECONTROL	deflector	ISBAL1
+IS_BALWOBBLECONTROL	online	1
+IS_BALWOBBLECONTROL dialog	angle (°) step	10
+IS_BALWOBBLECONTROL dialog	axis (°) step	10
+IS_BALWOBBLECONTROL dialog	mix (°) step	10
+
+DEFCONTROL	setting X	32768
+
+MONTAGEACQUIRE	Nx	2
+MONTAGEACQUIRE	Ny	3
+MONTAGEACQUIRE	overlap	0.2
+MONTAGEACQUIRE	coarse overlap	0.1
+MONTAGEACQUIRE	fine overlap	0.4
+MONTAGEACQUIRE	stitch	1
+
+
+DIFFALIGN	recalculate	0
+
+PROGRESSINFO	lines	12
+SCALEMARKER	attributes	0
+SCALEMARKER	background	 0, 0, 0
+SCALEMARKER	font	Arial
+SCALEMARKER	font size	12
+SCALEMARKER	foreground	 255, 255, 255
+SCALEMARKER	position X	0.05
+SCALEMARKER	position Y	0.95
+SCALEMARKER	right aligned	0
+DEFWOBBLECONTROL	online	1
+COMPWOBBLER dialog	angle (°) step	10
+COMPWOBBLER	frequency (Hz)	0.04
+COMPWOBBLER	polar	1
+COMPWOBBLER	sync camera	1
+COMPWOBBLER	window position	 1679, 471
+FINDZONE	origin	 0, 0
+
+
+MONTAGEACQUIRE	MAG shift beam	0
+MONTAGEACQUIRE	MAG tilt beam	0
+MONTAGEACQUIRE	balance intensity	1
+
+PRECDIFF	amplitude	20
+PRECDIFF	amplitude units	2
+PRECDIFF	angle (°)	0
+PRECDIFF	beam shift on	0
+PRECDIFF	beam tilt on	1
+PRECDIFF	bisection width	3
+PRECDIFF	brightness on	0
+PRECDIFF	condenser stigmator on	0
+PRECDIFF	control filament	0
+PRECDIFF	DIFF shift deflector	ISBAL2
+PRECDIFF	frequency (Hz)	0.1
+PRECDIFF	HOLZ index	1
+PRECDIFF	HOLZ separation (1/nm)	1.85
+PRECDIFF	init MAG alignment	1
+PRECDIFF	init MAG SA alignment	1
+PRECDIFF	intensity method	maximum
+PRECDIFF	MAG shift on	0
+PRECDIFF	MAG shift power	1
+PRECDIFF	number of exposures	60
+PRECDIFF	sampling method	normal
+PRECDIFF	scanning method	normal
+PRECDIFF	settings directory	C:\Documents and Settings\7105267
+PRECDIFF	sg range (1/nm)	0.07
+PRECDIFF	use montage	0
+PRECDIFF	warp correction	0
+PRECDIFF	use stack	0
+PRECDIFF	warp scale	3.6
+PRECDIFF	stack binning	2
+PRECDIFF	stack bytes	2
+PRECDIFF	show raw	0
+PRECDIFF	fit steps	2
+PRECDIFF	Cs ratio	-1.2
+PRECDIFF	DIFF shift on	1
+PRECDIFF	position 1	 9.5, 18
+PRECDIFF	position 2	 9.1, -140.8
+PRECDIFF	control rho	0
+PRECDIFF	omega origin (°)	-140.8
+PRECDIFF	phi origin (mrad)	9.1
+PRECDIFF	help filename	PRECDIFF_Help.docx
+
+PRECDIFF dialog	amplitude step	10
+PRECDIFF dialog	angle (°) step	0.1
+
+PRECDIFFACQUIRE	f0 (mm)	2.3
+PRECDIFFACQUIRE	C3 (mm)	1
+PRECDIFFACQUIRE	C5 (mm)	0
+PRECDIFFACQUIRE	HOLZ index	0.5
+PRECDIFFACQUIRE	HOLZ separation (1/nm)	0.8
+PRECDIFFACQUIRE	intensity method	integrated
+PRECDIFFACQUIRE	number of exposures	30
+PRECDIFFACQUIRE	sampling method	normal
+PRECDIFFACQUIRE	scanning method	normal
+PRECDIFFACQUIRE	sg range (1/nm)	0.02
+PRECDIFFACQUIRE	show raw	0
+PRECDIFFACQUIRE	stack binning	2
+PRECDIFFACQUIRE	stack bytes	2
+PRECDIFFACQUIRE	use montage	1
+PRECDIFFACQUIRE	use stack	0
+PRECDIFFACQUIRE	warp correction	0
+PRECDIFFACQUIRE	warp scale	4
+PRECDIFFACQUIRE	direction	random
+PRECDIFFACQUIRE	bisection width	1
+
+PRECDIFFSCAN	angle start	0
+PRECDIFFSCAN	angle stop	0
+PRECDIFFSCAN	number of steps	30
+PRECDIFFSCAN	phi start	0
+PRECDIFFSCAN	phi stop	10
+PRECDIFFSCAN	steps	200
+PRECDIFFSCAN	angle start (deg)	199
+PRECDIFFSCAN	angle stop (deg)	199
+PRECDIFFSCAN	phi start (mrad)	-10
+PRECDIFFSCAN	phi stop (mrad)	10
+
+PRECDIFFWOBBLER	frequency (Hz)	0.02
+PRECDIFFWOBBLER	polar	1
+PRECDIFFWOBBLER	sync camera	1
+PRECDIFFWOBBLER	window position	1143,15
+PRECDIFFWOBBLER dialog	angle (°) step	10
+PRECDIFFWOBBLER	title	PrecDiff Wobbler
+
+FINEDIFFALIGN	use montage	1
+
+SMARTACQUIREEXT	extension factor	10
+SMARTACQUIREEXT	maximum counts	16000
+SMARTACQ	extend range	0
+SMARTACQ	online	1
+SMARTACQ	setup	search
+SMARTACQUIRE	number of exposures	1
+SMARTACQGAINREF	number of exposures	4
+SMARTACQDARKREF	number of exposures	1
+
+SMARTACQ	search	 0.1, 4, 0, 0, 1, 1, 4, 1,"median", 1
+SMARTACQ	focus	 0.1, 4, 0, 0, 1, 1, 4, 1,"median", 1
+SMARTACQ	record	 0.3, 2, 1, 0, 1, 1, 4, 1,"median", 1
+
+SMARTACQSTEM	search	 256, 256, 0, 20, 0, 1, 2, 1, 2, 0, 4, 3
+SMARTACQSTEM	focus	 512, 256, 0, 2, 1, 0, 2, 1, 2, 0, 2, 1
+SMARTACQSTEM	record	 512, 512, 30, 40, 0, 1, 2, 0, 2, 0, 2, 1
+
+PROCESSACQ	number of exposures	1
+PROCESSACQ	processing mode	median
+PROCESSACQ	use DIFF streak correction	0
+PROCESSACQ	high-quality (slow) view	1
+SMARTACQ	max. saved dark ref	10
+SMARTACQ	max. saved gain ref	5
+
+MONTAGECOARSEALIGN	setup	search
+DEFWOBBLER	setup	search
+DIFFALIGN	setup	record
+
+SMARTACQ	help filename	SMARTACQ_Help.docx
+SMARTACQPROC	high-quality (slow) view	0
+SMARTACQPROC	number of exposures	1
+SMARTACQPROC	processing mode	median
+SMARTACQPROC	use DIFF streak correction	1
+JEMTOMOSTEM	number of frames	5
+JEMTOMOSTEM	search	0
+JEMTOMOSTEM	tilt increment (°)	1
+SMARTACQSTEM	help filename	SMARTACQSTEM_Help.docx
+SMARTACQSTEM	online	1
+SMARTACQSTEM	setup	record
+SMARTACQSTEM	signal	1
+SMARTACQSTEM	image height (pix)	512
+SMARTACQSTEM	image width (pix)	512
+SMARTACQSTEM	line sync	0
+SMARTACQSTEM	pixel time (us)	20
+SMARTACQSTEM	BF/DF index	0
+SMARTACQSTEM	HAADF index	2
+SMARTACQSTEM	JEOL index	1
+SMARTACQSTEM	view	

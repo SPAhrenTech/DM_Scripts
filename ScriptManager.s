@@ -7,6 +7,7 @@ module com.gatan.dm.ScriptManager
 
 number DM_version=2
 
+string SCRIPTMANAGER_sScriptsPrefsName="ScriptPrefs.txt"
 string SCRIPTMANAGER_sScriptsListName="ScriptFiles.txt"
 number SCRIPTMANAGER_display=0
 number SCRIPTSMANAGER_echo=0
@@ -23,12 +24,20 @@ interface PanelProto
 	void setPanelPosition(object self,string sName,number wX,number wY);
 	string getTitle(object self);
 	void setTitle(object self,string sTitle);
+	void readPrefs(object self);
+	void writePrefs(object self);
 	void readScriptList(object self);
+}
+
+interface ScriptMngrProto
+{
+	TagGroup getTag(object self);
+	number scriptsFileExists(object self,string &sPath);
 }
 
 class PanelObjectList:ObjectList
 {	
-
+	object scriptMngr
 	PanelObjectList(object self)
 	{
 	}
@@ -39,7 +48,12 @@ class PanelObjectList:ObjectList
 		number nPanels=self.sizeOfList()
 		result(nPanels+" still in list\n");
 		//foreach(object panel;self)
-		}
+	}
+	
+	void setScriptMngr(object self,object &m)
+	{
+		scriptMngr=m
+	}
 	
 	object updateMenu(object self)
 	{		
@@ -315,8 +329,6 @@ class PanelObjectList:ObjectList
 		}
 	}
 
-
-
 	number registerPalette(object self,object obj,string sName,string sTitle,number disp)
 	{
 		number tok=registerScriptPalette(obj.init(),sName,sTitle)
@@ -389,17 +401,22 @@ interface TechniqueProto
 
 class TechniqueList
 {
-
+	object scriptMngr
+	
 	//This is just used to bridge between the main scope and the local scope
 	//of the functions below.
 	object taskObj;
 	object getTaskObj(object self){return taskObj;}
 	object setTaskObj(object self,object obj){return taskObj=obj;}
 	
+	void setScriptMngr(object self,object &m)
+	{
+		scriptMngr=m
+	}
+
 	//
 	void loadTasks(object self)
 	{
-		result("----\n")
 		TagGroup scriptMngrTag;
 		TagGroup globalTag=getPersistentTagGroup()
 		if(globalTag.tagGroupDoesTagExist("Script Management"))
@@ -439,7 +456,7 @@ class TechniqueList
 			image iconImg:=rgbImage("icon",4,sizeXp,sizeYp);//
 			rgbimage rimg
 			number gotImage=0
-			if(doesFileExist(sIconPath))
+			if(scriptMngr.scriptsFileExists(sIconPath))
 			{
 				image img:=openImage(sIconPath)
 				number sizeX,sizeY;getSize(img,sizeX,sizeY)
@@ -478,6 +495,7 @@ class TechniqueList
 			{
 				iconImg=RGBA(icol,irow,iradius,255)
 			}
+			
 			object tech=createTechnique(sTechTitle,iconImg);
 			//add tasks
 			TagGroup taskTag
@@ -515,7 +533,6 @@ class TechniqueList
 				}
 				
 				addWorkflowTask(tech,taskID,essent,disp)
-
 			}
 
 			//Get group for tech
@@ -530,6 +547,7 @@ class TechniqueList
 				groupID=registerTechniqueGroup(sGroup)
 				groupsTag.tagGroupSetTagAsNumber(sGroup,groupID)
 			}
+			
 			addTechniqueToGroup(tech,groupID)
 		}
 	}
@@ -562,7 +580,6 @@ class TechniqueList
 		}
 
 	}
-
 
 	//
 	number getTask(object self,string sName,object &obj)
@@ -1136,7 +1153,7 @@ class TaskInfoDialog:uiFrame
 //
 class ScriptManager:object
 {
-	string sScriptsListName
+	string sScriptsPath
 	TagGroup scriptList
 
 	object utilsInfoDlg
@@ -1147,31 +1164,6 @@ class ScriptManager:object
 	object taskInfoDlg
 	object panelList;
 	object techList
-	
-	//
-	number getFilenameParts(object self,string sPath,string &sDir,string &sName)
-	{
-		number nChar=len(sPath)
-		string c=""
-		sDir="";sName=""
-		number found=0
-		number i
-		for(i=nChar-1;i>0;i--)
-		{
-			c=mid(sPath,i,1)
-			if(c=="\\")
-			{
-				sDir=left(sPath,i) 
-				sName=right(sPath,nChar-i-1)
-
-				found=1
-				break
-				
-			}
-		
-		}	
-		return found
-	}
 
 	ScriptManager(object self)
 	{
@@ -1182,28 +1174,91 @@ class ScriptManager:object
 		taskInfoDlg=alloc(TaskInfoDialog)
 		panelList=alloc(PanelObjectList);
 		techList=alloc(TechniqueList)
+		
+		panelList.setScriptMngr(self)
+		techList.setScriptMngr(self)
 
-		if(SCRIPTSMANAGER_echo)result("Constructing script manager.\n");
-		TagGroup globalTag=getPersistentTagGroup()
-		TagGroup scriptMngrTag
-		if(globalTag.tagGroupDoesTagExist("Script Management"))
-			globalTag.tagGroupGetTagAsTagGroup("Script Management",scriptMngrTag);		
-		else
-		{		
-			globalTag.tagGroupCreateNewLabeledTag("Script Management")	;	
-			scriptMngrTag=newTagGroup();
-			globalTag.tagGroupSetTagAsTagGroup("Script Management",scriptMngrTag);
-		}
-		number scriptMngrID;
+		TagGroup scriptMngrTag=self.getTag()
 
 		if(!scriptMngrTag.tagGroupDoesTagExist("Script Manager ID"))
 			scriptMngrTag.tagGroupCreateNewLabeledTag("Script Manager ID")
-
-		scriptMngrTag.tagGroupSetTagAsNumber("Script Manager ID",scriptObjectGetID(self))	
-		sScriptsListName=SCRIPTMANAGER_sScriptsListName
+		scriptMngrTag.tagGroupSetTagAsNumber("Script Manager ID",scriptObjectGetID(self))
+		
 		self.readScriptList()
 	}
 	
+
+	TagGroup getTag(object self)
+	{
+		if(SCRIPTSMANAGER_echo)result("Finding script manager.\n");
+		TagGroup globalTag=getPersistentTagGroup()
+		TagGroup tag
+		if(globalTag.tagGroupDoesTagExist("Script Management"))
+			globalTag.tagGroupGetTagAsTagGroup("Script Management",tag);		
+		else
+		{	
+			if(SCRIPTSMANAGER_echo)result("Constructing script manager.\n");	
+			globalTag.tagGroupCreateNewLabeledTag("Script Management")	;	
+			tag=newTagGroup();
+			globalTag.tagGroupSetTagAsTagGroup("Script Management",tag);
+		}
+		return tag
+	}
+
+	//
+	number getFilenameParts(object self,string sPath,string &sDir,string &sName)
+	{
+		number nChar=len(sPath)
+		sDir="";sName=""
+		number found=1
+		number hasDir = 0
+		number dirPos = 0
+		number i
+		for(i=nChar-1;i>0;i--)
+		{
+			if(mid(sPath,i,1)=="\\")
+			{	
+				hasDir = 1	
+				dirPos = i
+				break				
+			}					
+		}
+		sName=right(sPath,nChar-dirPos)
+		if(hasDir)
+		{
+			sDir=left(sPath,dirPos) 
+		}	
+		return found
+	}
+		
+	number scriptsFileExists(object self,string &sPath)
+	{
+		if(doesFileExist(sPath))
+		{
+			return 1
+		}
+		
+		string sScriptsFilePath
+		self.getTag().tagGroupGetTagAsString("Scripts File Path",sScriptsFilePath)			
+		if(!doesDirectoryExist(sScriptsFilePath))
+		{
+			string sPrefsDir=getApplicationDirectory("preference",0)
+			sPrefsDir=pathconcatenate(sPrefsDir,"JEM_files")
+			sScriptsFilePath=pathconcatenate(sPrefsDir,sScriptsFilePath)
+		}
+		string sDir,sFilename
+		if(self.getFilenameParts(sPath,sDir,sFilename))
+		{
+			sPath=pathconcatenate(sScriptsFilePath,sFilename)
+			if(doesFileExist(sPath))
+			{
+				return 1
+			}			
+		}
+
+		return 0
+	}
+
 	object getPanelList(object self){return panelList;}
 
 	number registerPanel(object self,object obj,string sName,string sTitle,number disp)
@@ -1264,10 +1319,11 @@ class ScriptManager:object
 	}
 
 	//
-	void readSpecScriptList(object self,string sPath)
+	void readScriptList(object self)
 	{
 		scriptList=newTagList()
-		if(doesFileExist(sPath))
+		string sPath = SCRIPTMANAGER_sScriptsListName
+		if(self.scriptsFileExists(sPath))
 		{
 			if(SCRIPTSMANAGER_echo)result ("Reading script list...\n")
 			number nFile=openFileForReading(sPath)
@@ -1401,20 +1457,14 @@ class ScriptManager:object
 			closeFile(nfile)
 		}
 	}
-
-	//
-	void readScriptList(object self)
-	{
-		string sPrefsDir=getApplicationDirectory("preference",0)
-		sPrefsDir=pathconcatenate(sPrefsDir,"JEM_files")
-		sPrefsDir=pathconcatenate(sPrefsDir,sScriptsListName)
-		self.readSpecScriptList(sPrefsDir)
-	}
 	
-	void writeSpecScriptList(object self,string sPath)
+	void writeScriptList(object self)
 	{
-		if(doesFileExist(sPath))
+		string sPath = SCRIPTMANAGER_sScriptsListName
+		if(self.scriptsFileExists(sPath))
+		{
 			deleteFile(sPath)
+		}
 		createFile(sPath)
 		number nScripts=scriptList.tagGroupCountTags()
 
@@ -1478,15 +1528,6 @@ class ScriptManager:object
 			writeFile(nFile,s)
 		}
 		closeFile(nfile)
-	}
-	
-	//
-	void writeScriptList(object self)
-	{
-		string sPrefsDir=getApplicationDirectory("preference",0)
-		sPrefsDir=pathconcatenate(sPrefsDir,"JEM_files")
-		sPrefsDir=pathconcatenate(sPrefsDir,sScriptsListName)
-		self.writeSpecScriptList(sPrefsDir)
 	}
 	
 	void setList(object self,number iSel,TagGroup listTag)
@@ -1764,7 +1805,10 @@ class ScriptManager:object
 	{
 		string sName;scriptTag.tagGroupGetTagAsString("name",sName)
 		string sPath;scriptTag.tagGroupGetTagAsString("path",sPath)
-		addScriptFileToMenu(sPath,sName,"","",1)
+		if(self.scriptsFileExists(sPath))
+		{
+			addScriptFileToMenu(sPath,sName,"","",1)
+		}
 	}
 
 	void installMenuItem(object self,TagGroup scriptTag)
@@ -1774,7 +1818,10 @@ class ScriptManager:object
 		string sPath;scriptTag.tagGroupGetTagAsString("path",sPath)
 		string sMenu;scriptTag.tagGroupGetTagAsString("menu",sMenu)
 		string sSubmenu;scriptTag.tagGroupGetTagAsString("submenu",sSubmenu)
-		addScriptFileToMenu(sPath,sLabel,sMenu,sSubmenu,0)
+		if(self.scriptsFileExists(sPath))
+		{
+			addScriptFileToMenu(sPath,sLabel,sMenu,sSubmenu,0)
+		}
 	}
 
 	void installPalette(object self,TagGroup scriptTag)
@@ -1847,8 +1894,10 @@ class ScriptManager:object
 			if(asc(c)==92)
 				sExtIconPath+="\\"
 		}
-		
-		techList.registerTechnique(sName,sTitle,sGroup,sExtIconPath)
+		if(self.scriptsFileExists(sExtIconPath))
+		{
+			techList.registerTechnique(sName,sTitle,sGroup,sExtIconPath)
+		}
 	}
 
 	void installTask(object self,TagGroup scriptTag)
@@ -2167,58 +2216,78 @@ class ScriptManager:object
 
 			if((sType=="technique"))
 			{
-				string sOldPath;altScriptTag.tagGroupGetTagAsString("path",sOldPath)		
+				string sOldPath;altScriptTag.tagGroupGetTagAsString("path",sOldPath)
+				string sFilename,sOldDir
+				if(!self.getFilenameParts(sOldPath,sOldDir,sFilename))continue	
+				if(!doesFileExist(sOldPath))
+				if(self.scriptsFileExists(sOldPath))
+				{
+				}		
 				image img:=openImage(sOldPath)
 				
-				string sFilename,sOldDir
-				if(!self.getFilenameParts(sOldPath,sOldDir,sFilename))continue
-				string sNewPath=sDir+sFileName
+				string sNewPath=pathconcatenate(sDir,sFileName)
 				if(doesFileExist(sNewPath))
 					deleteFile(sNewPath)
 				img.saveImage(sNewPath)
-				altScriptTag.tagGroupSetTagAsString("path",sNewPath)		
-				result(sNewPath+"\n")
+				altScriptTag.tagGroupSetTagAsString("path",sFileName)		
+				result("\t"+sNewPath+"\n")
 				//self.installLibrary(scriptTag)
 				//scriptTag.tagGroupSetTagAsString("path",sPath)
 			}	
 			
 			if((sType=="library")||(sType=="menu item"))
 			{
-				string sOldPath;altScriptTag.tagGroupGetTagAsString("path",sOldPath)		
+				string sOldPath;altScriptTag.tagGroupGetTagAsString("path",sOldPath)
+				
+				string sFilename,sOldDir
+				if(!self.getFilenameParts(sOldPath,sOldDir,sFilename))continue	
+				if(!self.scriptsFileExists(sOldPath))
+				{
+				}
 				number nFile=openFileForReading(sOldPath)
 				string sScript,sLine
 				while(readFileLine(nFile,sLine))
 					sScript+=sLine
 				closeFile(nFile)
 				
-				string sFilename,sOldDir
-				if(!self.getFilenameParts(sOldPath,sOldDir,sFilename))continue
-				string sNewPath=sDir+sFileName
+				string sNewPath=pathconcatenate(sDir,sFileName)
 				if(doesFileExist(sNewPath))
 					deleteFile(sNewPath)
 				createFile(sNewPath)
 				nFile=openFileForWriting(sNewPath)
 				writeFile(nFile,sScript)
 				closeFile(nFile)
-				altScriptTag.tagGroupSetTagAsString("path",sNewPath)		
+				altScriptTag.tagGroupSetTagAsString("path",sFileName)		
 				result(sNewPath+"\n")
 			}
 			altScriptList.tagGroupInsertTagAsTagGroup(infinity(),altScriptTag)
 		}
 		TagGroup dupScriptList=scriptList.tagGroupClone()
 		scriptList=altScriptList
-		string sPath=pathconcatenate(sDir,sScriptsListName)
-		result(sPath+"\n")
-		self.writeSpecScriptList(sPath)
+		TagGroup scriptMngrTag=self.getTag()		
+		if(!scriptMngrTag.tagGroupDoesTagExist("Scripts File Path"))
+		{
+			scriptMngrTag.tagGroupCreateNewLabeledTag("Scripts File Path")
+			scriptMngrTag.tagGroupSetTagAsString("Scripts File Path",sDir)
+		}
+		self.writeScriptList()
 		scriptList=dupScriptList
+		
 	}
 
 	void importSet(object self)
 	{
 		string sDir=getApplicationDirectory(0,0);
 		if(!getDirectoryDialog(sDir))return
-		string sPath=pathconcatenate(sDir,sScriptsListName)
-		self.readSpecScriptList(sPath)
+		
+		TagGroup scriptMngrTag=self.getTag()		
+		if(!scriptMngrTag.tagGroupDoesTagExist("Scripts File Path"))
+		{
+			scriptMngrTag.tagGroupCreateNewLabeledTag("Scripts File Path")
+		}
+		scriptMngrTag.tagGroupSetTagAsString("Scripts File Path",sDir)
+		
+		self.readScriptList()
 		number nScripts=scriptList.tagGroupCountTags()
 		TagGroup altScriptList=newTagList()
 		number i
@@ -2237,27 +2306,33 @@ class ScriptManager:object
 				string sFilename,sOldDir
 				if(!self.getFilenameParts(sOldPath,sOldDir,sFilename))continue
 				result(sDir+sFileName+"\n")
-				string sNewPath=sDir+sFileName
+				string sNewPath=/*sDir+*/sFileName
 				altScriptTag.tagGroupSetTagAsString("path",sNewPath)		
 				//self.installLibrary(scriptTag)
 				//scriptTag.tagGroupSetTagAsString("path",sPath)
-			}	
+			}
 			altScriptList.tagGroupInsertTagAsTagGroup(infinity(),altScriptTag)
 		}
 		scriptList=altScriptList;
-		self.writeScriptList()
+		//self.writeScriptList()
 	}
 	
 	void openLibrary(object self,TagGroup scriptTag)
 	{
 		string sPath;scriptTag.tagGroupGetTagAsString("path",sPath)		
-		newScriptWindowFromFile(sPath)
+		if(self.scriptsFileExists(sPath))
+		{	
+			newScriptWindowFromFile(sPath)	
+		}
 	}
 
 	void openMenuItem(object self,TagGroup scriptTag)
 	{
 		string sPath;scriptTag.tagGroupGetTagAsString("path",sPath)		
-		newScriptWindowFromFile(sPath)
+		if(self.scriptsFileExists(sPath))
+		{	
+			newScriptWindowFromFile(sPath)	
+		}
 	}
 
 	void openScript(object self,number iSel)
@@ -2348,6 +2423,7 @@ object scriptMngr;
 	else 
 		scriptMngr=alloc(ScriptManager)
 }
+
 object getScriptMngr(){return scriptMngr;}
 
 object resetScriptMngr()
